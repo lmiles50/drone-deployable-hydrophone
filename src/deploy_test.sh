@@ -10,7 +10,7 @@ SAMPLE_RATE=44100
 CHANNELS=2
 FILE_DURATION=10
 DATA_DIRECTORY="$HOME/hydrophone_test"
-ADC_GAIN=48
+ADC_GAIN=103
 CNT=1
 
 # ---------------- Graceful exit on Ctrl+C ----------------
@@ -67,6 +67,14 @@ if [ -e "/sys/class/gpio" ]; then
     echo "in" | sudo tee /sys/class/gpio/gpio$PPS_GPIO/direction 2>/dev/null || true
     echo "both" | sudo tee /sys/class/gpio/gpio$PPS_GPIO/edge 2>/dev/null || true
 fi
+
+echo "Setting Gain..."
+amixer -c 1 sset 'ADC Left' ADC_GAIN
+amixer -c 1 sset 'ADC Right' ADC_GAIN
+
+amixer -c 1 sset 'ADC Left' unmute  2>/dev/null
+amixer -c 1 sset 'ADC Right' unmute 2>/dev/null
+
 
 # ---------------- Main Recording Loop ----------------
 while true; do
